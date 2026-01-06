@@ -439,6 +439,27 @@ class SalesOrder(SellingController):
 		if self.get("reserve_stock"):
 			self.create_stock_reservation_entries()
 
+		customer_email = frappe.db.get_value("Customer", self.customer, "email_id")
+
+
+		if customer_email:
+
+			pdf = frappe.get_print(doctype="Sales Order", name=self.name, print_format="Standard", as_pdf=True)
+
+			frappe.sendmail(
+				recipients=customer_email,
+				subject=f"Sales Order - {self.name}",
+				message=f"Dear {self.customer},<br><br>Please find the attached Sales Order <b>{self.name}</b> and please revert back or contact us for any further clarifications.<br><br>Regards,<br>{self.company}",
+				attachments=[{
+					"fname": f"{self.name}.pdf",
+					"fcontent": pdf
+				}]
+
+			)
+			frappe.msgprint("Email sent to customer successfully.")
+		else:
+			frappe.msgprint("No email ID found for the customer.")
+
 	def on_cancel(self):
 		self.ignore_linked_doctypes = (
 			"GL Entry",

@@ -41,6 +41,7 @@
   "branch",
   "employment_details",
   "scheduled_confirmation_date",
+  "probation_completed_date",
   "column_break_32",
   "final_confirmation_date",
   "contract_end_date",
@@ -78,8 +79,10 @@
   "salary_mode",
   "bank_details_section",
   "bank_name",
-  "column_break_heye",
+  "area_branch",
   "bank_ac_no",
+  "column_break_heye",
+  "bank_account_name",
   "iban",
   "personal_details",
   "marital_status",
@@ -87,6 +90,10 @@
   "column_break6",
   "blood_group",
   "health_details",
+  "section_break_fawh",
+  "aadhar_number",
+  "column_break_wydr",
+  "pan_number",
   "passport_details_section",
   "passport_number",
   "valid_upto",
@@ -409,7 +416,6 @@
    "options": "\nBank\nCash\nCheque"
   },
   {
-   "depends_on": "eval:doc.salary_mode == 'Bank'",
    "fieldname": "bank_name",
    "fieldtype": "Data",
    "label": "Bank Name",
@@ -811,11 +817,47 @@
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval:doc.salary_mode == 'Bank'",
    "fieldname": "iban",
    "fieldtype": "Data",
+<<<<<<< Updated upstream
    "label": "IBAN",
    "options": "IBAN"
+=======
+   "label": "IBAN"
+  },
+  {
+   "fieldname": "section_break_fawh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "aadhar_number",
+   "fieldtype": "Data",
+   "label": "Aadhar Number"
+  },
+  {
+   "fieldname": "column_break_wydr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pan_number",
+   "fieldtype": "Data",
+   "label": "Pan Number"
+  },
+  {
+   "fieldname": "bank_account_name",
+   "fieldtype": "Data",
+   "label": "Bank Account Name"
+  },
+  {
+   "fieldname": "area_branch",
+   "fieldtype": "Data",
+   "label": "Area Branch"
+  },
+  {
+   "fieldname": "probation_completed_date",
+   "fieldtype": "Date",
+   "label": "Probation Completed Date"
+>>>>>>> Stashed changes
   }
  ],
  "icon": "fa fa-user",
@@ -823,7 +865,11 @@
  "image_field": "image",
  "is_tree": 1,
  "links": [],
+<<<<<<< Updated upstream
  "modified": "2025-08-29 11:52:12.819878",
+=======
+ "modified": "2025-12-30 14:25:57.033941",
+>>>>>>> Stashed changes
  "modified_by": "Administrator",
  "module": "Setup",
  "name": "Employee",
@@ -866,6 +912,10 @@
   }
  ],
  "row_format": "Dynamic",
+<<<<<<< Updated upstream
+=======
+ "rows_threshold_for_grid_search": 20,
+>>>>>>> Stashed changes
  "search_fields": "employee_name",
  "show_name_in_global_search": 1,
  "sort_field": "modified",

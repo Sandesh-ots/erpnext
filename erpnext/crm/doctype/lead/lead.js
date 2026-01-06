@@ -51,6 +51,7 @@ erpnext.LeadController = class LeadController extends frappe.ui.form.Controller 
 
 		this.show_notes();
 		this.show_activities();
+    	this.set_questionnaire();
 	}
 
 	add_lead_to_prospect(frm) {
@@ -236,6 +237,30 @@ erpnext.LeadController = class LeadController extends frappe.ui.form.Controller 
 			form_wrapper: $(this.frm.wrapper),
 		});
 		crm_activities.refresh();
+	}
+	set_questionnaire() {
+		const lead_stage = this.frm.doc.lead_stage;
+		const type = this.frm.doc.type;
+		const status = this.frm.doc.status;
+		frappe.db.get_list("CRM Question Master", {
+			filters: {
+				lead_stage: lead_stage,
+				status:status,
+				type:type
+			},
+			fields: ['question']
+		}).then(records => {
+			if (records && records.length > 0){
+				const existing_questions = (this.frm.doc.items || []).map(i => i.question);
+				records.forEach( r => {
+					if(!existing_questions.includes(r.question)){
+						let row = this.frm.add_child("items");
+						row.question = r.question;
+					}
+				});
+			}
+			this.frm.refresh_field("items");
+		});
 	}
 };
 

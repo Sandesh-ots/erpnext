@@ -253,6 +253,7 @@ class Quotation(SellingController):
 		opp = frappe.get_doc("Opportunity", opportunity)
 		opp.set_status(status=status, update=True)
 
+
 	@frappe.whitelist()
 	def declare_enquiry_lost(self, lost_reasons_list, competitors, detailed_reason=None):
 		if not (self.is_fully_ordered() or self.is_partially_ordered()):
@@ -292,6 +293,7 @@ class Quotation(SellingController):
 		# update enquiry status
 		self.update_opportunity("Quotation")
 		self.update_lead()
+		#self.send_quotation_email()
 
 	def on_cancel(self):
 		if self.lost_reasons:
@@ -331,6 +333,48 @@ class Quotation(SellingController):
 
 		return rows_with_alternatives
 
+	def send_quotation_email(self):
+	    customer_email = None
+	    person_type = self.quotation_to
+
+	    if person_type == "Customer":
+	        customer_email = frappe.db.get_value("Customer", self.customer_name, "email_id")
+	    elif person_type == "Lead":
+	        customer_email = frappe.db.get_value("Lead", self.lead, "email_id")
+	    elif person_type == "Prospect":
+	        customer_email = frappe.db.get_value("Prospect", self.prospect, "email_id")
+
+	    if customer_email:
+	        pdf = frappe.get_print(
+	            doctype="Quotation",
+	            name=self.name,
+	            print_format="Standard",
+	            as_pdf=True
+	        )
+
+	        frappe.sendmail(
+	            recipients=customer_email,
+	            subject=f"Sales Quotation - {self.name}",
+	            message=frappe.render_template(
+	                """Dear {{ name }},<br><br>
+	                Please find the attached Sales Quotation <b>{{ quotation_name }}</b>.<br><br>
+	                Kindly revert back or contact us for any further clarifications.<br><br>
+	                Regards,<br>{{ company }}""",
+	                {
+	                    "name": self.quotation_to,
+	                    "quotation_name": self.name,
+	                    "company": self.company
+	                }
+	            ),
+	            attachments=[{
+	                "fname": f"{self.name}.pdf",
+	                "fcontent": pdf
+	            }]
+	        )
+
+	        frappe.msgprint("Email sent to customer successfully.")
+	    else:
+	        frappe.msgprint("No email ID found for the Customer / Lead / Prospect.")
 
 def get_list_context(context=None):
 	from erpnext.controllers.website_list_for_contact import get_list_context

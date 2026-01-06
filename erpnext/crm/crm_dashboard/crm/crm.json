@@ -4,13 +4,19 @@
    "card": "New Lead (Last 1 Month)"
   },
   {
-   "card": "New Opportunity (Last 1 Month)"
+   "card": "Leads With Qualification Status New"
   },
   {
-   "card": "Won Opportunity (Last 1 Month)"
+   "card": "Leads With location Munich"
   },
   {
-   "card": "Open Opportunity"
+   "card": "Conversion Potential greater than 50"
+  },
+  {
+   "card": "Qualified Leads"
+  },
+  {
+   "card": "Leads with Product Delivery within 6 months"
   }
  ],
  "charts": [
@@ -19,27 +25,27 @@
    "width": "Full"
   },
   {
-   "chart": "Opportunity Trends",
-   "width": "Full"
-  },
-  {
-   "chart": "Won Opportunities",
-   "width": "Full"
-  },
-  {
-   "chart": "Territory Wise Opportunity Count",
-   "width": "Half"
-  },
-  {
-   "chart": "Opportunities via Campaigns",
-   "width": "Half"
-  },
-  {
-   "chart": "Territory Wise Sales",
+   "chart": "Leads Count",
    "width": "Full"
   },
   {
    "chart": "Lead Source",
+   "width": "Half"
+  },
+  {
+   "chart": "Leads by Qualification Status",
+   "width": "Half"
+  },
+  {
+   "chart": "Lead Heatmap",
+   "width": "Full"
+  },
+  {
+   "chart": "Leads By status",
+   "width": "Half"
+  },
+  {
+   "chart": "Leads by stage",
    "width": "Half"
   }
  ],
@@ -47,10 +53,10 @@
  "dashboard_name": "CRM",
  "docstatus": 0,
  "doctype": "Dashboard",
- "idx": 0,
+ "idx": 2,
  "is_default": 0,
  "is_standard": 1,
- "modified": "2020-07-21 18:56:47.230053",
+ "modified": "2025-11-11 12:51:23.917200",
  "modified_by": "Administrator",
  "module": "CRM",
  "name": "CRM",

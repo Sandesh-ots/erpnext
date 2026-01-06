@@ -24,9 +24,9 @@ class Lead(SellingController, CRMNote):
 	from typing import TYPE_CHECKING
 
 	if TYPE_CHECKING:
-		from frappe.types import DF
-
 		from erpnext.crm.doctype.crm_note.crm_note import CRMNote
+		from erpnext.crm.doctype.lead_questionnaire.lead_questionnaire import LeadQuestionnaire
+		from frappe.types import DF
 
 		annual_revenue: DF.Currency
 		blog_subscriber: DF.Check
@@ -34,6 +34,7 @@ class Lead(SellingController, CRMNote):
 		city: DF.Data | None
 		company: DF.Link | None
 		company_name: DF.Data | None
+		conversion_potential: DF.Literal["", "0 - 25 %", "26 - 50%", "51 - 75%", "76 - 100%"]
 		country: DF.Link | None
 		customer: DF.Link | None
 		disabled: DF.Check
@@ -43,11 +44,13 @@ class Lead(SellingController, CRMNote):
 		gender: DF.Link | None
 		image: DF.AttachImage | None
 		industry: DF.Link | None
+		items: DF.Table[LeadQuestionnaire]
 		job_title: DF.Data | None
 		language: DF.Link | None
 		last_name: DF.Data | None
 		lead_name: DF.Data | None
 		lead_owner: DF.Link | None
+		lead_stage: DF.Literal["Welcome", "Data Gathering", "Requirements and Clarifications", "Demo"]
 		market_segment: DF.Link | None
 		middle_name: DF.Data | None
 		mobile_no: DF.Data | None
@@ -56,29 +59,22 @@ class Lead(SellingController, CRMNote):
 		notes: DF.Table[CRMNote]
 		phone: DF.Data | None
 		phone_ext: DF.Data | None
-		qualification_status: DF.Literal["Unqualified", "In Process", "Qualified"]
+		potential_volume: DF.Literal["", "1-10 vehicles", "11-50 vehicles", "50 + vehicles"]
 		qualified_by: DF.Link | None
 		qualified_on: DF.Date | None
-		request_type: DF.Literal["", "Product Enquiry", "Request for Information", "Suggestions", "Other"]
+		request_type: DF.Literal["", "Product Enquiry", "Request for Information", "Suggestions", "Others"]
 		salutation: DF.Link | None
+		service_location: DF.Data | None
 		source: DF.Link | None
 		state: DF.Data | None
-		status: DF.Literal[
-			"Lead",
-			"Open",
-			"Replied",
-			"Opportunity",
-			"Quotation",
-			"Lost Quotation",
-			"Interested",
-			"Converted",
-			"Do Not Contact",
-		]
+		status: DF.Literal["Open", "Hold", "Completed"]
 		territory: DF.Link | None
 		title: DF.Data | None
-		type: DF.Literal["", "Client", "Channel Partner", "Consultant"]
+		type: DF.Literal["", "Individual Buyer", "Fleet Operator / Delivery Company", "Automotive Distributor", "Shared Mobility Provider", "Corporate", "Investor", "Others"]
 		unsubscribed: DF.Check
+		urgency: DF.Literal["", "Immediate", "In 3 months", "In 6 months", "In 1 year", "In 1 + years"]
 		website: DF.Data | None
+		website_url: DF.Data | None
 		whatsapp_no: DF.Data | None
 	# end: auto-generated types
 

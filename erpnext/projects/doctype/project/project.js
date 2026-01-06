@@ -67,6 +67,9 @@ frappe.ui.form.on("Project", {
 	},
 
 	refresh: function (frm) {
+    	fetch_sub_project(frm)
+		calulate_progress(frm);
+		frm.events.show_activities(frm);
 		if (frm.doc.__islocal) {
 			frm.web_link && frm.web_link.remove();
 		} else {
@@ -208,6 +211,33 @@ frappe.ui.form.on("Project", {
 			frm.set_value("subject", __("For project {0}, update your status", [frm.doc.name]));
 		}
 	},
+
+	show_activities: function (frm) {
+		if (!frm.doc || frm.doc.docstatus == 1 || frm.is_new()) return;
+		const open_wrapper = frm.fields_dict.open_activities_html?.wrapper;
+		const all_wrapper = frm.fields_dict.all_activities_html?.wrapper;
+
+		if (!open_wrapper || !all_wrapper) {
+			console.warn("Activity wrappers not found, skipping CRMActivities init");
+			return;
+		}
+
+		try {
+			const crm_activities = new erpnext.utils.CRMActivities({
+				open_activities_wrapper: $(open_wrapper),
+				all_activities_wrapper: $(all_wrapper),
+				form_wrapper: $(frm.wrapper),
+				frm: frm,
+			});
+
+			if (crm_activities) {
+				crm_activities.refresh();
+			}
+		} catch (e) {
+			console.error("Error initializing CRMActivities:", e);
+		}
+	},
+
 });
 
 function open_form(frm, doctype, child_doctype, parentfield) {
@@ -224,5 +254,40 @@ function open_form(frm, doctype, child_doctype, parentfield) {
 		new_doc.project = frm.doc.name;
 
 		frappe.ui.form.make_quick_entry(doctype, null, null, new_doc);
+	});
+}
+
+function calulate_progress(frm) {
+	if(!frm.is_new()){
+		frappe.call({
+			method: "erpnext.projects.doctype.project.project.update_percent_complete",
+			args: {p_name: frm.doc.name},
+			callback: function(r) {
+				if (r.message){
+					frm.set_value("percent_complete",r.message);
+					//frm.save();
+					//frm.refresh_field("percent_complete");
+				}
+			}
+		});
+	}
+}
+
+function fetch_sub_project(frm) {
+	frappe.call({
+		method: "erpnext.projects.doctype.project.project.get_sub_project",
+		args: {project_name:frm.doc.name},
+		callback: function(r) {
+			frm.clear_table("sub_projects")
+			if( r.message && r.message.length > 0 ){
+				r.message.forEach( sp => {
+					let row = frm.add_child("sub_projects");
+					row.sub_project_id = sp.name;
+					row.sub_project_name = sp.sub_project_name;
+					row.progress = sp.percent_complete;
+				});
+			}
+			frm.refresh_field("sub_projects");
+		}
 	});
 }

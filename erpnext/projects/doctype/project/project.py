@@ -199,7 +199,7 @@ class Project(Document):
 
 	def update_project(self):
 		"""Called externally by Task"""
-		self.update_percent_complete()
+		#self.update_percent_complete()
 		self.update_costing()
 		self.db_update()
 
@@ -753,3 +753,35 @@ def update_costing_and_billing(project: str | None = None):
 	project = frappe.get_doc("Project", project)
 	project.update_costing()
 	project.db_update()
+<<<<<<< Updated upstream
+=======
+
+@frappe.whitelist()
+def update_percent_complete(p_name):
+    project = frappe.get_doc("Project", p_name)
+    total_progress = 0
+    count = 0
+    # sub_task_progress = frappe.db.get_all(task.sub_tasks, "progress")
+    for sub_project in project.sub_projects:
+	    if sub_project.progress is not None:
+	        total_progress += sub_project.progress
+	        count += 1
+
+    # Calculate average
+    avg_progress = total_progress / count if count > 0 else 0
+
+    # Update parent Task progress
+    # project.progress = avg_progress
+    # project.save(ignore_permissions=True)
+
+    return avg_progress
+
+@frappe.whitelist()
+def get_sub_project(project_name):
+    sub_projects = frappe.db.get_all(
+        "Sub Project",
+        filters={"parent_project": project_name},
+        fields=["name", "sub_project_name", "percent_complete"]
+    )
+    return sub_projects or []
+>>>>>>> Stashed changes
